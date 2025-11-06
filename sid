@@ -637,11 +637,18 @@
         </label>
         <label
           >Period:
+          <!-- 🔒 Constrain period to 1..6 -->
           <input
             id="adminAttPeriod"
-            placeholder="1"
-            style="width: 60px" /></label
-        ><br /><br />
+            type="number"
+            min="1"
+            max="6"
+            step="1"
+            placeholder="1–6"
+            style="width: 60px"
+          />
+        </label>
+        <br /><br />
 
         <div id="cameraSection">
           <button type="button" onclick="openCamera('adminVideo')">
@@ -691,7 +698,6 @@
 
       <div class="main-content">
         <div id="adminStudentDetails" class="student-details text-center">
-          
           <h5>Select a student to view attendance</h5>
         </div>
       </div>
@@ -937,6 +943,25 @@
       let faceMatcher = null;
       let sessionMarked = new Set();
 
+      // helper: get a valid period 1..6 or show error
+      function getValidatedPeriod() {
+        const v = document.getElementById("adminAttPeriod").value.trim();
+        const n = parseInt(v, 10);
+        if (!Number.isInteger(n) || n < 1 || n > 6) {
+          Swal.fire({
+            title: 'Invalid period',
+            text: 'Please enter a period between 1 and 6.',
+            icon: 'warning',
+            timer: 1600,
+            showConfirmButton: false,
+            timerProgressBar: true,
+            position: 'top',
+          });
+          return null;
+        }
+        return String(n);
+      }
+
       async function startRecognitionLoop() {
         if (recognitionRunning) return;
         if (!modelsLoaded) {
@@ -989,9 +1014,15 @@
               if (best && best.label !== "unknown") {
                 const usn = best.label;
                 if (!sessionMarked.has(usn)) {
+
                   const subj = document.getElementById("adminAttSubject").value;
-                  const period =
-                    document.getElementById("adminAttPeriod").value || "1";
+                  const periodValidated = getValidatedPeriod();
+                  if (periodValidated === null) {
+                    // don't mark if invalid period
+                    continue;
+                  }
+                  const period = periodValidated;
+
                   const now = new Date();
                   const date = now.toISOString().split("T")[0];
                   const time = now.toLocaleTimeString();
@@ -1006,7 +1037,7 @@
                   saveStudentData();
                   sessionMarked.add(usn);
 
-                  // 🔔 Animated tick with title "Attendance marked"
+                  // ✅ Animated tick with title "Attendance marked"
                   Swal.fire({
                     title: 'Attendance marked',
                     text: `${studentData[usn].name} (${usn}) · ${subj} · Period ${period}`,
@@ -1142,7 +1173,6 @@
       }
       function showAdminStudent(usn) {
         const s = studentData[usn];
-        //showStudentInfo();
         let html = `<img src="${s.photo}" style="width:100px;border-radius:50%;"><h4>${s.name}</h4>
             <p><b>Username:</b> ${s.uname} | <b>USN:</b> ${s.usn} | <b>Email:</b> ${s.email}<br><b>Phone:</b> ${s.phone} | <b>Course:</b> ${s.course} | <b>Sem:</b> ${s.semester}</p>
             <button onclick="deleteStudent('${usn}')" style="background:#ff4d4d; color:#fff; margin-bottom:10px;">Delete Student</button>`;
@@ -1189,4 +1219,3 @@
     </script>
   </body>
 </html>
-
