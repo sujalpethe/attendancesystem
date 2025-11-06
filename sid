@@ -608,7 +608,7 @@
         <input id="adminUser" placeholder="Username" />
         <input id="adminPwd" placeholder="Password" type="password" />
         <button onclick="adminLogin()">Login</button>
-        <p>Default: <b>admin / admin123</b></p>
+        
       </div>
     </div>
 
