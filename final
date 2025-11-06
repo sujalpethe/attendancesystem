@@ -203,12 +203,313 @@
 
       /* overlay canvas (we'll position it inside modal near video) */
       #overlayCanvas {
+        background: #00000000 !important;
+        top: -341px;
+        position: relative;
+      }
+
+      /* ================== Purple-Blue Accent + Medium Neutral Gray (CSS-only override) ================== */
+      :root {
+        --accent-1: #6a5cf6; /* bold purple-blue */
+        --accent-2: #4f46e5; /* deeper accent */
+        --accent-3: #8a92ff; /* hover/outline */
+        --text: #f2f4f8; /* off-white */
+        --muted: #b2b8c6; /* secondary text */
+        --g-900: #111317; /* page background (dark neutral gray) */
+        --g-850: #151922;
+        --g-800: #1b202b; /* cards/panels */
+        --g-700: #242b38; /* inputs/rows */
+        --g-600: #2f3747; /* borders */
+        --g-500: #6b7280; /* medium neutral gray (requested) */
+        --shadow: 0 12px 28px rgba(0, 0, 0, 0.45),
+          inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        --r-lg: 16px;
+        --r-md: 12px;
+        --r-sm: 10px;
+        --speed: 260ms;
+      }
+      body {
+        color: var(--text) !important;
+        background: radial-gradient(
+            1000px 600px at 12% -10%,
+            rgba(106, 92, 246, 0.1),
+            transparent 60%
+          ),
+          radial-gradient(
+            900px 700px at 100% 0%,
+            rgba(79, 70, 229, 0.1),
+            transparent 55%
+          ),
+          linear-gradient(180deg, var(--g-900), var(--g-850)) !important;
+      }
+      body::before {
+        filter: grayscale(100%) brightness(0.55) contrast(1.08) !important;
+        mix-blend-mode: luminosity !important;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: linear-gradient(
+          90deg,
+          var(--accent-2),
+          var(--accent-1)
+        ) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: var(--shadow) !important;
+      }
+      .logout-btn {
+        background: transparent !important;
+        color: #fff !important;
+        border: 1px solid rgba(255, 255, 255, 0.28) !important;
+        border-radius: 12px !important;
+        padding: 10px 16px !important;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3) !important;
+      }
+      .logout-btn:hover {
+        background: rgba(255, 255, 255, 0.12) !important;
+      }
+
+      /* Buttons */
+      button {
+        background: linear-gradient(
+          180deg,
+          var(--accent-1),
+          var(--accent-2)
+        ) !important;
+        color: #fff !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.2px !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        border-radius: var(--r-sm) !important;
+        box-shadow: 0 14px 32px rgba(106, 92, 246, 0.35),
+          0 0 0 1px rgba(255, 255, 255, 0.06) inset !important;
+        position: relative;
+        overflow: hidden;
+        transition: transform var(--speed), filter var(--speed),
+          box-shadow var(--speed) !important;
+      }
+      button::after {
+        content: "";
         position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: 160px; /* will be adjusted dynamically */
-        pointer-events: none;
-        z-index: 120;
+        top: 0;
+        left: -150%;
+        width: 140%;
+        height: 100%;
+        background: linear-gradient(
+          110deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.35) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        transform: skewX(-20deg);
+        transition: left 900ms ease;
+      }
+      button:hover {
+        transform: translateY(-1px) scale(1.02) !important;
+        filter: brightness(1.06) !important;
+      }
+      button:hover::after {
+        left: 110%;
+      }
+      #homeButtons button:last-of-type {
+        background: linear-gradient(
+          90deg,
+          var(--accent-2),
+          var(--accent-1)
+        ) !important;
+        box-shadow: 0 18px 36px rgba(79, 70, 229, 0.45) !important;
+      }
+
+      /* Intro paragraph */
+      #homeButtons p {
+        color: var(--muted) !important;
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: var(--r-md) !important;
+        padding: 12px 16px !important;
+        display: inline-block;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+
+      /* Modals */
+      .modal {
+        background: rgba(14, 16, 22, 0.68) !important;
+        z-index: 1000 !important;
+      }
+      .modal-content {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.06)
+        ) !important;
+        color: var(--text) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: var(--r-lg) !important;
+        box-shadow: var(--shadow) !important;
+      }
+      .close {
+        color: #ececff !important;
+      }
+      .close:hover {
+        color: #fff !important;
+      }
+
+      /* Inputs */
+      input,
+      select {
+        background: var(--g-700) !important;
+        color: var(--text) !important;
+        border: 1px solid var(--g-600) !important;
+        border-radius: 12px !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+      }
+      input::placeholder {
+        color: var(--g-500) !important;
+      }
+      input:focus,
+      select:focus {
+        outline: none !important;
+        border-color: var(--accent-3) !important;
+        box-shadow: 0 0 0 3px rgba(138, 146, 255, 0.35) !important;
+      }
+
+      /* Panels / cards */
+      .sidebar {
+        background: var(--g-800) !important;
+        color: var(--text) !important;
+        border-right: 1px solid var(--g-600) !important;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .main-content {
+        color: var(--text) !important;
+      }
+      .student-details {
+        background: var(--g-800) !important;
+        color: var(--text) !important;
+        border: 1px solid var(--g-600) !important;
+        border-radius: var(--r-lg) !important;
+        box-shadow: var(--shadow) !important;
+      }
+
+      /* Student list */
+      .student-item {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid var(--g-600) !important;
+        border-radius: 14px !important;
+        transition: transform var(--speed), background var(--speed),
+          box-shadow var(--speed) !important;
+      }
+      .student-item:hover {
+        background: rgba(122, 131, 255, 0.1) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 12px 26px rgba(79, 70, 229, 0.32) !important;
+      }
+      .student-item.active {
+        background: linear-gradient(
+          90deg,
+          rgba(122, 131, 255, 0.25),
+          rgba(79, 70, 229, 0.2)
+        ) !important;
+        color: #fff !important;
+        border-color: transparent !important;
+      }
+
+      /* Subject headers */
+      .subject-header {
+        background: linear-gradient(
+          90deg,
+          var(--accent-2),
+          var(--accent-1)
+        ) !important;
+        color: #fff !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        border-radius: 12px !important;
+        font-weight: 800 !important;
+        box-shadow: 0 10px 24px rgba(79, 70, 229, 0.4),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
+      }
+
+      /* Tables */
+      .attendance-table {
+        background: var(--g-800) !important;
+        border: 1px solid var(--g-600) !important;
+        border-radius: 12px !important;
+        overflow: hidden;
+        box-shadow: var(--shadow) !important;
+      }
+      .attendance-table th,
+      .attendance-table td {
+        color: var(--text) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+      }
+      .attendance-table thead th {
+        background: rgba(255, 255, 255, 0.06) !important;
+      }
+      .attendance-table tbody tr:hover {
+        background: rgba(122, 131, 255, 0.08) !important;
+      }
+
+      /* Status chips */
+      .present {
+        background: rgba(122, 131, 255, 0.16) !important;
+        color: #fff !important;
+      }
+      .absent {
+        background: rgba(107, 114, 128, 0.28) !important;
+        color: #e8eaf2 !important;
+      }
+
+      /* Camera visibility & sizing */
+      #cameraSection {
+        position: relative;
+        z-index: 1002;
+      }
+      video,
+      canvas {
+        display: block !important;
+        width: min(92vw, 440px) !important;
+        max-width: 100% !important;
+        aspect-ratio: 4/3 !important;
+        min-height: 240px !important;
+        background: #0e1220 !important;
+        border: 1px solid rgba(122, 131, 255, 0.32) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45) !important;
+      }
+
+      /* Scrollbars */
+      .sidebar,
+      .main-content,
+      .modal {
+        scrollbar-width: thin;
+        scrollbar-color: var(--g-500) rgba(255, 255, 255, 0.06);
+      }
+      .sidebar::-webkit-scrollbar,
+      .main-content::-webkit-scrollbar,
+      .modal::-webkit-scrollbar {
+        width: 10px;
+      }
+      .sidebar::-webkit-scrollbar-thumb,
+      .main-content::-webkit-scrollbar-thumb,
+      .modal::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #a0a6b8, #6b7280);
+        border-radius: 20px;
+      }
+      .sidebar::-webkit-scrollbar-track,
+      .main-content::-webkit-scrollbar-track,
+      .modal::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 20px;
+      }
+
+      /* Motion preferences */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
       }
     </style>
   </head>
@@ -225,12 +526,10 @@
         Students: Register/Login | Admin: Login | Admin can also mark attendance
         via face capture
       </p>
+      <br />
       <button onclick="showModal('registerModal')">Register</button>
       <button onclick="showModal('studentLoginModal')">Student Login</button>
       <button onclick="showModal('adminLoginModal')">Admin Login</button>
-      <button onclick="showModal('adminCaptureModal')">
-        📷 Mark Attendance (Admin)
-      </button>
     </div>
 
     <!-- REGISTER MODAL -->
@@ -322,14 +621,14 @@
         <label
           >Subject:
           <select id="adminAttSubject">
-            <option>Sepm</option>
-            <option>Rm</option>
-            <option>Evs</option>
-            <option>Ai</option>
-            <option>Cn</option>
-            <option>Toc</option>
-            <option>Pe</option>
-            <option>Tp</option>
+            <option>SEPM</option>
+            <option>RMIPR</option>
+            <option>EVS</option>
+            <option>AI</option>
+            <option>CN</option>
+            <option>TOC</option>
+            <option>PE</option>
+            <option>TP</option>
           </select>
         </label>
         <label
@@ -345,7 +644,8 @@
             📷 Open Camera</button
           ><br />
           <video id="adminVideo" autoplay muted></video>
-          <canvas id="adminCanvas"></canvas><br />
+          <canvas id="overlayCanvas"></canvas>
+          <br />
           <div style="margin-top: 8px">
             <button type="button" onclick="forceRecognizeNow()">
               🔁 Force Recognize Now
@@ -356,8 +656,6 @@
             ></span>
           </div>
         </div>
-
-        <canvas id="overlayCanvas"></canvas>
       </div>
     </div>
 
@@ -375,6 +673,9 @@
 
     <div id="adminDashboard" style="display:none; flex;">
       <div class="sidebar">
+        <button onclick="showModal('adminCaptureModal')">
+          📷 Mark Attendance (Admin)
+        </button>
         <h4>Students</h4>
         <input
           id="searchInput"
@@ -383,8 +684,10 @@
         />
         <div id="studentList" class="student-list"></div>
       </div>
+
       <div class="main-content">
         <div id="adminStudentDetails" class="student-details text-center">
+          
           <h5>Select a student to view attendance</h5>
         </div>
       </div>
@@ -528,14 +831,14 @@
             photo: dataUrl,
             descriptor,
             subjects: {
-              Sepm: [],
-              Rm: [],
-              Evs: [],
-              Ai: [],
-              Cn: [],
-              Toc: [],
-              Pe: [],
-              Tp: [],
+              SEPM: [],
+              RMIPR: [],
+              EVS: [],
+              AI: [],
+              CN: [],
+              TOC: [],
+              PE: [],
+              TP: [],
             },
           };
           saveStudentData();
@@ -573,7 +876,7 @@
         let html = "";
         for (const [sub, records] of Object.entries(s.subjects)) {
           html += `<div><div class="subject-header" onclick="toggleSubject(this)">${sub} ▼</div>
-      <table class="attendance-table"><thead><tr><th>Date</th><th>Time</th><th>Period</th><th>Status</th></tr></thead>
+      <table class="attendance-table"><thead><tr><th>Date</th><th>Time</th><th>PEriod</th><th>Status</th></tr></thead>
       <tbody>${records
         .map(
           (r) =>
@@ -636,7 +939,7 @@
           alert("Face models not loaded yet.");
           return;
         }
-        await openCamera("adminVideo");
+        //await openCamera("adminVideo");
         const labeled = buildLabeledDescriptors();
         if (labeled.length === 0) {
           alert("No registered students — register first");
@@ -750,11 +1053,6 @@
         const video = document.getElementById("adminVideo");
         const overlay = document.getElementById("overlayCanvas");
         const rect = video.getBoundingClientRect();
-        overlay.style.left = rect.left + rect.width / 2 + "px";
-        overlay.style.top = rect.top + "px";
-        overlay.style.transform = "translateX(-50%)";
-        overlay.style.width = rect.width + "px";
-        overlay.style.height = rect.height + "px";
       }
 
       function clearOverlay() {
@@ -766,7 +1064,9 @@
       }
 
       function closeAdminCaptureModal() {
+        const video = document.getElementById("adminVideo");
         closeModal("adminCaptureModal");
+
         stopRecognitionLoop();
       }
 
@@ -798,7 +1098,9 @@
       }
       function closeModal(id) {
         document.getElementById(id).style.display = "none";
-        if (id === "adminCaptureModal") stopRecognitionLoop();
+        if (id === "adminCaptureModal") {
+          stopRecognitionLoop();
+        }
       }
       window.onclick = (e) => {
         if (e.target.classList && e.target.classList.contains("modal")) {
@@ -824,7 +1126,8 @@
       }
       function showAdminStudent(usn) {
         const s = studentData[usn];
-        let html = `<h4>${s.name}</h4>
+        //showStudentInfo();
+        let html = `<img src="${s.photo}" style="width:100px;border-radius:50%;"><h4>${s.name}</h4>
             <p><b>Username:</b> ${s.uname} | <b>USN:</b> ${s.usn} | <b>Email:</b> ${s.email}<br><b>Phone:</b> ${s.phone} | <b>Course:</b> ${s.course} | <b>Sem:</b> ${s.semester}</p>
             <button onclick="deleteStudent('${usn}')" style="background:#ff4d4d; color:#fff; margin-bottom:10px;">Delete Student</button>`;
         for (const [sub, records] of Object.entries(s.subjects)) {
@@ -870,4 +1173,3 @@
     </script>
   </body>
 </html>
-
