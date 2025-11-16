@@ -608,7 +608,6 @@
         <input id="adminUser" placeholder="Username" />
         <input id="adminPwd" placeholder="Password" type="password" />
         <button onclick="adminLogin()">Login</button>
-        
       </div>
     </div>
 
@@ -949,13 +948,13 @@
         const n = parseInt(v, 10);
         if (!Number.isInteger(n) || n < 1 || n > 6) {
           Swal.fire({
-            title: 'Invalid period',
-            text: 'Please enter a period between 1 and 6.',
-            icon: 'warning',
+            title: "Invalid period",
+            text: "Please enter a period between 1 and 6.",
+            icon: "warning",
             timer: 1600,
             showConfirmButton: false,
             timerProgressBar: true,
-            position: 'top',
+            position: "top",
           });
           return null;
         }
@@ -968,7 +967,6 @@
           alert("Face models not loaded yet.");
           return;
         }
-        //await openCamera("adminVideo");
         const labeled = buildLabeledDescriptors();
         if (labeled.length === 0) {
           alert("No registered students — register first");
@@ -1014,8 +1012,8 @@
               if (best && best.label !== "unknown") {
                 const usn = best.label;
                 if (!sessionMarked.has(usn)) {
-
-                  const subj = document.getElementById("adminAttSubject").value;
+                  const subj =
+                    document.getElementById("adminAttSubject").value;
                   const periodValidated = getValidatedPeriod();
                   if (periodValidated === null) {
                     // don't mark if invalid period
@@ -1039,13 +1037,13 @@
 
                   // ✅ Animated tick with title "Attendance marked"
                   Swal.fire({
-                    title: 'Attendance marked',
+                    title: "Attendance marked",
                     text: `${studentData[usn].name} (${usn}) · ${subj} · Period ${period}`,
-                    icon: 'success',
+                    icon: "success",
                     timer: 1800,
                     showConfirmButton: false,
                     timerProgressBar: true,
-                    position: 'top-end',
+                    position: "top-end",
                     toast: true,
                   });
 
@@ -1212,6 +1210,47 @@
             : "none";
         });
       }
+
+      /* ===================== Enter → Next Field ===================== */
+      document.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+
+        const target = e.target;
+        if (
+          !target.matches(
+            'input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]), select, textarea'
+          )
+        ) {
+          return;
+        }
+
+        // Find the logical container (current modal, dashboard section, etc.)
+        const container =
+          target.closest(
+            ".modal-content, .student-details, .main-content, body"
+          ) || document.body;
+
+        // All focusable data fields inside this container (visible only)
+        const fields = Array.from(
+          container.querySelectorAll(
+            'input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]), select, textarea'
+          )
+        ).filter((el) => !el.disabled && el.offsetParent !== null);
+
+        const index = fields.indexOf(target);
+        if (index === -1) return;
+
+        // Prevent default submit behavior
+        e.preventDefault();
+
+        const next = fields[index + 1];
+        if (next) {
+          next.focus();
+          if (typeof next.select === "function") {
+            next.select();
+          }
+        }
+      });
 
       window.addEventListener("load", () => {
         loadStudentData();
